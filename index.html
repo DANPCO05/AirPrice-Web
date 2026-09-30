@@ -1,0 +1,698 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AirPrice · Prototipo interactivo</title>
+  <meta name="description" content="Mockup interactivo de AirPrice">
+  <link rel="preconnect" href="https://images.unsplash.com">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIINfQ3ynlC0SxF2uZ0Yavxbxxhv1cIc6nA=" crossorigin="">
+  <style>
+    :root{
+      --navy:#102b49;
+      --navy-2:#173c64;
+      --blue:#2176ff;
+      --blue-2:#59a7ff;
+      --cyan:#eaf5ff;
+      --text:#10213a;
+      --muted:#6e7d93;
+      --line:#dce5ef;
+      --panel:#ffffff;
+      --bg:#f5f8fc;
+      --green:#24a66a;
+      --orange:#f6a21a;
+      --purple:#8d62e9;
+      --pink:#ea5f8c;
+      --shadow:0 18px 45px rgba(16,43,73,.10);
+      --radius:22px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      color:var(--text);
+      background:linear-gradient(#f8fbff,#f3f7fb);
+    }
+    button,input,select{font:inherit}
+    button{cursor:pointer}
+    a{color:inherit}
+    .shell{min-height:100vh}
+    .topbar{
+      position:sticky;top:0;z-index:1000;
+      display:flex;align-items:center;gap:28px;
+      padding:14px 34px;
+      color:white;background:rgba(10,33,57,.95);
+      backdrop-filter:blur(14px);
+      border-bottom:1px solid rgba(255,255,255,.08)
+    }
+    .brand{display:flex;align-items:center;gap:10px;font-size:22px;font-weight:900;white-space:nowrap}
+    .brandmark{
+      width:36px;height:36px;border-radius:11px;
+      display:grid;place-items:center;
+      background:linear-gradient(145deg,#55a9ff,#1a6eff);
+      box-shadow:0 9px 18px rgba(28,112,255,.28)
+    }
+    .nav{display:flex;gap:5px;flex:1;flex-wrap:wrap}
+    .nav button{
+      border:0;color:#d6e5f5;background:transparent;
+      padding:9px 12px;border-radius:10px
+    }
+    .nav button.active,.nav button:hover{background:rgba(255,255,255,.12);color:#fff}
+    .repo{
+      color:white;text-decoration:none;border:1px solid rgba(255,255,255,.28);
+      border-radius:10px;padding:9px 14px;font-weight:700
+    }
+    .page{display:none;max-width:1240px;margin:auto;padding:30px}
+    .page.active{display:block}
+    .hero{
+      overflow:hidden;border-radius:28px;min-height:555px;
+      display:grid;grid-template-columns:1.02fr .98fr;align-items:stretch;
+      background:
+        linear-gradient(90deg,rgba(247,251,255,.98) 0%,rgba(247,251,255,.92) 43%,rgba(247,251,255,.05) 68%),
+        url('https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=1800&q=85') center/cover;
+      box-shadow:var(--shadow);border:1px solid rgba(209,221,234,.8)
+    }
+    .hero-copy{padding:64px 54px;align-self:center}
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:8px;
+      background:#e9f3ff;color:#2f6cc8;font-weight:800;font-size:13px;
+      border-radius:999px;padding:8px 12px
+    }
+    h1{font-size:55px;line-height:1.02;letter-spacing:-.04em;margin:20px 0 16px;max-width:720px}
+    h1 span{color:var(--blue)}
+    h2{font-size:31px;letter-spacing:-.02em;margin:0 0 8px}
+    h3{margin:0 0 14px}
+    p{color:var(--muted);line-height:1.6}
+    .hero-copy p{font-size:18px;max-width:570px}
+    .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+    .btn{
+      min-height:46px;padding:12px 18px;border-radius:11px;border:1px solid var(--line);
+      background:#fff;color:var(--text);font-weight:800
+    }
+    .btn.primary{background:var(--blue);border-color:var(--blue);color:white;box-shadow:0 10px 22px rgba(33,118,255,.24)}
+    .btn.soft{background:#edf5ff;color:#2368c9;border-color:#dcecff}
+    .floating-card{
+      width:320px;align-self:center;justify-self:end;margin-right:52px;
+      background:rgba(255,255,255,.94);border:1px solid rgba(255,255,255,.88);
+      border-radius:20px;padding:15px;box-shadow:0 18px 55px rgba(5,27,48,.24);
+      backdrop-filter:blur(12px)
+    }
+    .floating-card img{width:100%;height:170px;object-fit:cover;border-radius:14px}
+    .price-line{display:flex;justify-content:space-between;align-items:end;gap:15px;margin-top:12px}
+    .price{font-size:27px;font-weight:900}
+    .cat{
+      display:flex;gap:8px;align-items:center;color:#176f52;background:#e8f8ef;
+      border-radius:12px;padding:9px 12px;font-weight:800;margin-top:12px
+    }
+    .feature-strip,.stats,.steps,.kpis{display:grid;gap:14px}
+    .feature-strip{grid-template-columns:repeat(3,1fr);margin-top:20px}
+    .stats{grid-template-columns:repeat(4,1fr);margin-top:18px}
+    .card,.stat,.step{
+      background:var(--panel);border:1px solid var(--line);border-radius:18px;
+      box-shadow:var(--shadow)
+    }
+    .mini-feature{display:flex;gap:14px;align-items:center;padding:18px;background:white;border:1px solid var(--line);border-radius:17px}
+    .icon{
+      flex:0 0 auto;width:42px;height:42px;border-radius:13px;display:grid;place-items:center;
+      background:#edf5ff;color:var(--blue);font-size:20px;font-weight:900
+    }
+    .mini-feature b,.stat b{display:block}
+    .mini-feature small,.stat small{color:var(--muted)}
+    .stat{padding:20px}
+    .stat strong{font-size:28px;display:block;margin-bottom:3px}
+    .section-head{margin:38px 0 16px}
+    .section-head small{color:var(--blue);font-weight:900;letter-spacing:.09em}
+    .steps{grid-template-columns:repeat(4,1fr)}
+    .step{padding:20px}
+    .stepnum{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#eaf3ff;color:var(--blue);font-weight:900;margin-bottom:14px}
+    .progress-wrap{margin:20px 0 28px}
+    .progress{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+    .progress span{height:6px;background:#dfe8f2;border-radius:99px}
+    .progress span.on{background:var(--blue)}
+    .steplabels{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:11px;color:var(--muted);font-size:12px}
+    .steplabels b{display:block;color:var(--text);font-size:13px}
+    .two{display:grid;grid-template-columns:1.05fr .95fr;gap:20px}
+    .card{padding:22px}
+    label{font-size:13px;font-weight:800;display:block;margin:14px 0 7px}
+    input,select{
+      width:100%;border:1px solid #cbd8e5;border-radius:10px;background:white;
+      padding:11px 12px;color:var(--text);outline:none
+    }
+    input:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(33,118,255,.12)}
+    .cols2,.cols3{display:grid;gap:12px}
+    .cols2{grid-template-columns:1fr 1fr}.cols3{grid-template-columns:repeat(3,1fr)}
+    #mapInput,#mapMarket{height:340px;border-radius:16px;overflow:hidden;border:1px solid var(--line)}
+    .photo-card{overflow:hidden;padding:0}
+    .photo-card img{width:100%;height:310px;object-fit:cover;display:block}
+    .photo-copy{padding:18px}
+    .note{background:#eef6ff;border:1px solid #d7e8fb;border-radius:14px;padding:16px;color:#4a6282}
+    .footer-actions{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:22px}
+    .counter{display:flex;align-items:center;gap:7px}
+    .counter button{width:38px;height:38px;border:1px solid var(--line);background:white;border-radius:9px;font-weight:900}
+    .counter output{min-width:40px;text-align:center;font-size:18px;font-weight:900}
+    .services{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}
+    .service{
+      display:flex;gap:9px;align-items:center;border:1px solid var(--line);border-radius:11px;
+      padding:11px;background:#fbfdff
+    }
+    .service input{width:auto}
+    .result-hero{
+      display:grid;grid-template-columns:1.1fr .9fr;gap:20px;
+      background:linear-gradient(135deg,#f0fff6,#fff8e8);
+      border:1px solid #d7ebdc;border-radius:20px;padding:24px
+    }
+    .result-main{text-align:center;padding:10px}
+    .class-badge{
+      display:inline-flex;gap:9px;align-items:center;
+      background:#ffbd32;color:#744900;border-radius:13px;padding:11px 26px;
+      font-size:29px;font-weight:900
+    }
+    .bars{margin-top:16px;text-align:left}
+    .barrow{display:grid;grid-template-columns:95px 1fr 55px;align-items:center;gap:10px;margin:12px 0}
+    .track{height:12px;border-radius:99px;background:#e8edf2;overflow:hidden}
+    .fill{height:100%;border-radius:99px}.econ{background:var(--green)}.mid{background:#2f80ed}.high{background:var(--orange)}.prem{background:var(--purple)}
+    .result-photo img{width:100%;height:215px;object-fit:cover;border-radius:15px}
+    .details{margin-top:14px;display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
+    .detail{background:#fff;border:1px solid #e1e8ee;border-radius:11px;padding:10px}
+    .detail small{color:var(--muted);display:block}
+    .explain-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}
+    .featurebar{display:grid;grid-template-columns:145px 1fr 45px;gap:10px;align-items:center;margin:10px 0}
+    .featurebar .track{height:10px}
+    .kpis{grid-template-columns:repeat(4,1fr);margin:18px 0}
+    .analytics{display:grid;grid-template-columns:1fr 1.1fr;gap:18px}
+    .donut-wrap{display:flex;align-items:center;justify-content:center;gap:26px;min-height:270px}
+    .donut{
+      width:190px;height:190px;border-radius:50%;
+      background:conic-gradient(var(--green) 0 25.14%,#2f80ed 25.14% 50.07%,var(--orange) 50.07% 75.01%,var(--purple) 75.01% 100%);
+      position:relative
+    }
+    .donut:after{content:"";position:absolute;inset:42px;border-radius:50%;background:white}
+    .legend{display:grid;gap:9px}
+    .legend span{display:flex;align-items:center;gap:8px}
+    .dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+    .table-wrap{overflow:auto}
+    table{width:100%;border-collapse:collapse;font-size:13px}
+    th,td{padding:10px;border-bottom:1px solid var(--line);text-align:left}
+    th{color:#5e6f86}
+    .toast{
+      position:fixed;right:20px;bottom:20px;z-index:2000;display:none;
+      background:var(--navy);color:white;padding:12px 16px;border-radius:11px;box-shadow:var(--shadow)
+    }
+    .toast.show{display:block}
+    .range-read{font-weight:800;color:var(--blue)}
+    @media(max-width:900px){
+      .topbar{flex-wrap:wrap;padding:14px 18px}
+      .nav{order:3;width:100%}
+      .hero{grid-template-columns:1fr;background:
+        linear-gradient(180deg,rgba(247,251,255,.98) 0%,rgba(247,251,255,.88) 55%,rgba(247,251,255,.18) 100%),
+        url('https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=1400&q=80') center/cover}
+      .floating-card{justify-self:start;margin:0 40px 40px}
+      .hero-copy{padding:48px 38px}
+      h1{font-size:44px}
+      .feature-strip,.stats,.steps,.kpis{grid-template-columns:repeat(2,1fr)}
+      .two,.result-hero,.explain-grid,.analytics{grid-template-columns:1fr}
+    }
+    @media(max-width:600px){
+      .page{padding:18px}
+      .hero-copy{padding:38px 24px}
+      h1{font-size:37px}
+      .floating-card{width:auto;margin:0 24px 24px}
+      .feature-strip,.stats,.steps,.kpis,.cols2,.cols3,.services{grid-template-columns:1fr}
+      .steplabels{grid-template-columns:repeat(2,1fr)}
+      .repo{display:none}
+      .barrow,.featurebar{grid-template-columns:80px 1fr 44px}
+    }
+  </style>
+</head>
+<body>
+<div class="shell" id="app">
+  <header class="topbar">
+    <div class="brand"><span class="brandmark">⌂</span>AirPrice</div>
+    <nav class="nav">
+      <button data-page="home" class="active">Inicio</button>
+      <button data-page="location">Clasificar</button>
+      <button data-page="market">Análisis</button>
+      <button data-page="result">Resultado</button>
+    </nav>
+    <a class="repo" href="https://github.com/DANPCO05/AirPrice" target="_blank" rel="noreferrer">GitHub ↗</a>
+  </header>
+
+  <main>
+    <section class="page active" id="page-home">
+      <div class="hero">
+        <div class="hero-copy">
+          <div class="eyebrow">▥ Machine Learning para un mercado más transparente</div>
+          <h1>Clasificación inteligente de alojamientos <span>Airbnb</span></h1>
+          <p>Utilizamos técnicas de Machine Learning para clasificar alojamientos en cuatro rangos de precio: Económico, Medio, Alto y Premium.</p>
+          <div class="actions">
+            <button class="btn primary" data-go="location">→ Clasificar alojamiento</button>
+            <button class="btn" data-go="market">▥ Ver análisis del mercado</button>
+          </div>
+        </div>
+        <div class="floating-card">
+          <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=900&q=80" alt="Apartamento moderno">
+          <div class="price-line">
+            <div><b>Apartamento moderno<br>en Westminster</b><small style="display:block;color:#6e7d93;margin-top:4px">📍 Londres, Reino Unido</small></div>
+            <div class="price">£142</div>
+          </div>
+          <div class="cat">▥ Categoría predicha: Alto</div>
+        </div>
+      </div>
+
+      <div class="feature-strip">
+        <div class="mini-feature"><span class="icon">▤</span><div><b>Datos reales de Airbnb</b><small>Basado en 61.617 alojamientos de Londres</small></div></div>
+        <div class="mini-feature"><span class="icon">✦</span><div><b>Machine Learning</b><small>Comparación de modelos de clasificación</small></div></div>
+        <div class="mini-feature"><span class="icon">▥</span><div><b>Explicabilidad</b><small>Conoce qué variables influyen en el resultado</small></div></div>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><strong>61.617</strong><small>Alojamientos analizados</small></div>
+        <div class="stat"><strong>32</strong><small>Variables consideradas</small></div>
+        <div class="stat"><strong>4</strong><small>Categorías de precio</small></div>
+        <div class="stat"><strong>Londres</strong><small>Dataset de referencia</small></div>
+      </div>
+
+      <div class="section-head"><small>PROCESO</small><h2>¿Cómo funciona AirPrice?</h2><p>En pocos pasos, obtén la clasificación de precio de un alojamiento y comprende los factores más relevantes.</p></div>
+      <div class="steps">
+        <div class="step"><div class="stepnum">1</div><h3>Ingresar características</h3><p>Ubicación, tipo, capacidad, comodidades y más.</p></div>
+        <div class="step"><div class="stepnum">2</div><h3>Analizar con ML</h3><p>El modelo procesa las variables del alojamiento.</p></div>
+        <div class="step"><div class="stepnum">3</div><h3>Obtener clasificación</h3><p>Recibe Económico, Medio, Alto o Premium.</p></div>
+        <div class="step"><div class="stepnum">4</div><h3>Conocer variables influyentes</h3><p>Visualiza qué factores tuvieron mayor impacto.</p></div>
+      </div>
+    </section>
+
+    <section class="page" id="page-location">
+      <h2>Clasificar alojamiento</h2>
+      <p>Selecciona la ubicación del alojamiento y continúa con las características de la propiedad.</p>
+
+      <div class="progress-wrap">
+        <div class="progress"><span class="on"></span><span></span><span></span><span></span></div>
+        <div class="steplabels">
+          <div><b>1. Ubicación</b>Zona y coordenadas</div>
+          <div><b>2. Propiedad</b>Características</div>
+          <div><b>3. Servicios</b>Disponibilidad</div>
+          <div><b>4. Anfitrión</b>Reseñas</div>
+        </div>
+      </div>
+
+      <div class="two">
+        <div class="card">
+          <h3>📍 Ubicación</h3>
+          <label for="zone">Zona / barrio</label>
+          <select id="zone">
+            <option>Westminster</option>
+            <option>Camden</option>
+            <option>Kensington and Chelsea</option>
+            <option>Southwark</option>
+            <option>Hackney</option>
+          </select>
+          <div class="cols2">
+            <div><label for="lat">Latitud</label><input id="lat" type="number" step="0.0001" value="51.5074"></div>
+            <div><label for="lng">Longitud</label><input id="lng" type="number" step="0.0001" value="-0.1278"></div>
+          </div>
+          <div id="mapInput" style="margin-top:16px"></div>
+        </div>
+        <div class="card photo-card">
+          <img src="https://images.unsplash.com/photo-1533929736458-ca588d08c8be?auto=format&fit=crop&w=1000&q=80" alt="Vista urbana de Londres">
+          <div class="photo-copy">
+            <h3>Ubicación estratégica</h3>
+            <p>La ubicación es una de las variables con mayor relación con el rango de precio. Puedes mover el marcador en el mapa o seleccionar una zona.</p>
+            <div class="note"><b>Tip</b><br>El mapa actualiza automáticamente las coordenadas del formulario.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-actions">
+        <button class="btn" data-go="home">← Atrás</button>
+        <button class="btn primary" id="toProperty">Continuar →</button>
+      </div>
+    </section>
+
+    <section class="page" id="page-property">
+      <h2>Características del alojamiento</h2>
+      <p>Completa la información principal de la propiedad y sus servicios.</p>
+
+      <div class="progress-wrap">
+        <div class="progress"><span class="on"></span><span class="on"></span><span class="on"></span><span></span></div>
+        <div class="steplabels">
+          <div><b>1. Ubicación</b>Completado</div>
+          <div><b>2. Propiedad</b>Características</div>
+          <div><b>3. Servicios</b>Disponibilidad</div>
+          <div><b>4. Anfitrión</b>Reseñas</div>
+        </div>
+      </div>
+
+      <div class="two">
+        <div class="card">
+          <h3>🏠 Propiedad</h3>
+          <div class="cols2">
+            <div>
+              <label for="ptype">Tipo de propiedad</label>
+              <select id="ptype"><option>Entire rental unit</option><option>House</option><option>Loft</option><option>Private room</option></select>
+            </div>
+            <div>
+              <label for="rtype">Tipo de alojamiento</label>
+              <select id="rtype"><option>Alojamiento completo</option><option>Habitación privada</option><option>Habitación compartida</option></select>
+            </div>
+          </div>
+
+          <label>Huéspedes</label>
+          <div class="counter"><button class="dec" type="button">−</button><output id="guests">4</output><button class="inc" type="button">+</button></div>
+
+          <div class="cols3">
+            <div><label for="bedrooms">Habitaciones</label><input id="bedrooms" type="number" min="0" max="20" value="2"></div>
+            <div><label for="beds">Camas</label><input id="beds" type="number" min="0" max="30" value="2"></div>
+            <div><label for="baths">Baños</label><input id="baths" type="number" min="0" max="20" step=".5" value="1.5"></div>
+          </div>
+
+          <div class="cols2">
+            <div><label for="rating">Valoración</label><input id="rating" type="number" min="0" max="5" step=".01" value="4.82"></div>
+            <div><label for="reviews">Número de reseñas</label><input id="reviews" type="number" min="0" value="124"></div>
+          </div>
+
+          <label for="availability">Disponibilidad anual</label>
+          <input id="availability" type="range" min="0" max="365" value="210">
+          <div class="range-read"><span id="availabilityOut">210</span> días/año</div>
+
+          <label>Servicios</label>
+          <div class="services">
+            <label class="service"><input type="checkbox" checked> Wi‑Fi</label>
+            <label class="service"><input type="checkbox" checked> Cocina</label>
+            <label class="service"><input type="checkbox" checked> Calefacción</label>
+            <label class="service"><input type="checkbox"> Estacionamiento</label>
+            <label class="service"><input type="checkbox" checked> Lavadora</label>
+            <label class="service"><input type="checkbox"> Aire acondicionado</label>
+          </div>
+        </div>
+
+        <div class="card photo-card">
+          <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1000&q=80" alt="Interior de alojamiento">
+          <div class="photo-copy">
+            <h3>Características que describen el alojamiento</h3>
+            <p>La capacidad, los baños, el tipo de propiedad, los servicios y la disponibilidad aportan señales importantes al modelo.</p>
+            <div class="note"><b>Mockup funcional</b><br>Los valores que ingreses aparecerán en el resultado de clasificación.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-actions">
+        <button class="btn" data-go="location">← Atrás</button>
+        <button class="btn primary" id="classifyBtn">✦ Clasificar alojamiento</button>
+      </div>
+    </section>
+
+    <section class="page" id="page-result">
+      <h2>Resultado de la predicción</h2>
+      <p>AirPrice muestra la categoría estimada y los factores que más influyeron en la clasificación.</p>
+
+      <div class="result-hero">
+        <div class="result-main">
+          <p style="font-weight:800;color:#267450">El alojamiento fue clasificado como</p>
+          <div class="class-badge" id="className">▥ ALTO</div>
+          <p><b>Confianza del modelo: <span id="confidence">87.4%</span></b></p>
+          <div class="bars">
+            <div class="barrow"><span>Económico</span><div class="track"><div class="fill econ" id="bEco" style="width:4%"></div></div><b id="pEco">4%</b></div>
+            <div class="barrow"><span>Medio</span><div class="track"><div class="fill mid" id="bMid" style="width:8%"></div></div><b id="pMid">8%</b></div>
+            <div class="barrow"><span>Alto</span><div class="track"><div class="fill high" id="bHigh" style="width:87%"></div></div><b id="pHigh">87%</b></div>
+            <div class="barrow"><span>Premium</span><div class="track"><div class="fill prem" id="bPrem" style="width:1%"></div></div><b id="pPrem">1%</b></div>
+          </div>
+        </div>
+
+        <div class="result-photo">
+          <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1000&q=80" alt="Apartamento">
+          <div class="details">
+            <div class="detail"><small>Zona</small><b id="rZone">Westminster</b></div>
+            <div class="detail"><small>Huéspedes</small><b id="rGuests">4</b></div>
+            <div class="detail"><small>Habitaciones</small><b id="rBedrooms">2</b></div>
+            <div class="detail"><small>Baños</small><b id="rBaths">1.5</b></div>
+            <div class="detail"><small>Rating</small><b id="rRating">4.82</b></div>
+            <div class="detail"><small>Disponibilidad</small><b><span id="rAvail">210</span> días</b></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="explain-grid">
+        <div class="card">
+          <h3>¿Por qué esta clasificación?</h3>
+          <p>Factores con mayor influencia en el resultado.</p>
+          <div class="featurebar"><span>Ubicación</span><div class="track"><div class="fill mid" style="width:82%"></div></div><b>31%</b></div>
+          <div class="featurebar"><span>Tipo de propiedad</span><div class="track"><div class="fill mid" style="width:68%"></div></div><b>24%</b></div>
+          <div class="featurebar"><span>Capacidad</span><div class="track"><div class="fill mid" style="width:55%"></div></div><b>18%</b></div>
+          <div class="featurebar"><span>Disponibilidad</span><div class="track"><div class="fill mid" style="width:43%"></div></div><b>14%</b></div>
+          <div class="featurebar"><span>Valoraciones</span><div class="track"><div class="fill mid" style="width:36%"></div></div><b>13%</b></div>
+        </div>
+        <div class="card">
+          <h3>Explicabilidad</h3>
+          <p>En la implementación final, esta sección puede conectarse con SHAP para mostrar cómo cada variable empuja la predicción hacia una categoría.</p>
+          <div class="note">
+            <b>Interpretación ejemplo</b><br><br>
+            La ubicación en <span id="eZone">Westminster</span>, una capacidad de <span id="eGuests">4</span> huéspedes y una valoración alta contribuyen a posicionar el alojamiento en un rango superior.
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-actions">
+        <button class="btn" data-go="location">Nueva clasificación</button>
+        <button class="btn primary" data-go="market">Ver análisis del mercado →</button>
+      </div>
+    </section>
+
+    <section class="page" id="page-market">
+      <h2>Análisis del mercado · Londres</h2>
+      <p>Vista exploratoria del dataset utilizado por AirPrice.</p>
+
+      <div class="kpis">
+        <div class="stat"><strong>61.617</strong><small>Alojamientos</small></div>
+        <div class="stat"><strong>32</strong><small>Variables</small></div>
+        <div class="stat"><strong>4</strong><small>Categorías</small></div>
+        <div class="stat"><strong>0</strong><small>Valores faltantes</small></div>
+      </div>
+
+      <div class="analytics">
+        <div class="card">
+          <h3>Distribución de categorías</h3>
+          <div class="donut-wrap">
+            <div class="donut"></div>
+            <div class="legend">
+              <span><i class="dot" style="background:var(--green)"></i>Económico 25,14%</span>
+              <span><i class="dot" style="background:#2f80ed"></i>Medio 24,93%</span>
+              <span><i class="dot" style="background:var(--orange)"></i>Alto 24,94%</span>
+              <span><i class="dot" style="background:var(--purple)"></i>Premium 24,99%</span>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Distribución geográfica de alojamientos</h3>
+          <div id="mapMarket"></div>
+        </div>
+      </div>
+
+      <div class="analytics" style="margin-top:18px">
+        <div class="card">
+          <h3>Variables con mayor relación</h3>
+          <div class="featurebar"><span>neighbourhood</span><div class="track"><div class="fill mid" style="width:82%"></div></div><b>0.82</b></div>
+          <div class="featurebar"><span>room_type</span><div class="track"><div class="fill mid" style="width:71%"></div></div><b>0.71</b></div>
+          <div class="featurebar"><span>accommodates</span><div class="track"><div class="fill mid" style="width:68%"></div></div><b>0.68</b></div>
+          <div class="featurebar"><span>bedrooms</span><div class="track"><div class="fill mid" style="width:63%"></div></div><b>0.63</b></div>
+          <div class="featurebar"><span>bathrooms</span><div class="track"><div class="fill mid" style="width:54%"></div></div><b>0.54</b></div>
+        </div>
+        <div class="card">
+          <h3>Diferencias entre categorías <small style="color:var(--muted)">(valores ilustrativos)</small></h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Característica</th><th>Económico</th><th>Medio</th><th>Alto</th><th>Premium</th></tr></thead>
+              <tbody>
+                <tr><td>Capacidad</td><td>2.1</td><td>3.2</td><td>4.1</td><td>5.8</td></tr>
+                <tr><td>Habitaciones</td><td>1.1</td><td>1.4</td><td>2.1</td><td>3.0</td></tr>
+                <tr><td>Baños</td><td>1.0</td><td>1.3</td><td>1.8</td><td>2.4</td></tr>
+                <tr><td>Rating</td><td>4.62</td><td>4.71</td><td>4.81</td><td>4.91</td></tr>
+                <tr><td>Disponibilidad</td><td>220</td><td>205</td><td>180</td><td>150</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+(function(){
+  const app=document.getElementById('app');
+  const pages=[...app.querySelectorAll('.page')];
+  const nav=[...app.querySelectorAll('.nav button')];
+  const toast=document.getElementById('toast');
+  let mapInput=null, inputMarker=null, mapMarket=null;
+
+  function notify(msg){
+    toast.textContent=msg;toast.classList.add('show');
+    setTimeout(()=>toast.classList.remove('show'),1700);
+  }
+
+  function show(name){
+    pages.forEach(p=>p.classList.toggle('active',p.id==='page-'+name));
+    nav.forEach(b=>b.classList.toggle('active',b.dataset.page===name || (name==='property' && b.dataset.page==='location')));
+    window.scrollTo({top:0,behavior:'smooth'});
+    if(name==='location') setTimeout(initInputMap,120);
+    if(name==='market') setTimeout(initMarketMap,120);
+  }
+
+  app.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>show(b.dataset.go)));
+  nav.forEach(b=>b.addEventListener('click',()=>show(b.dataset.page)));
+
+  const coords={
+    'Westminster':[51.4975,-0.1357],
+    'Camden':[51.5416,-0.1433],
+    'Kensington and Chelsea':[51.4991,-0.1938],
+    'Southwark':[51.5035,-0.0804],
+    'Hackney':[51.5450,-0.0553]
+  };
+
+  function initInputMap(){
+    if(typeof L==='undefined'){notify('No se pudo cargar el mapa. Revisa tu conexión.');return}
+    if(!mapInput){
+      mapInput=L.map('mapInput').setView([51.5074,-0.1278],12);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+        maxZoom:19, attribution:'&copy; OpenStreetMap'
+      }).addTo(mapInput);
+      inputMarker=L.marker([51.5074,-0.1278],{draggable:true}).addTo(mapInput).bindPopup('Ubicación del alojamiento');
+      inputMarker.on('dragend',function(e){
+        const p=e.target.getLatLng();
+        document.getElementById('lat').value=p.lat.toFixed(4);
+        document.getElementById('lng').value=p.lng.toFixed(4);
+      });
+    }
+    mapInput.invalidateSize();
+  }
+
+  function setMapLocation(){
+    const zone=document.getElementById('zone').value;
+    const p=coords[zone]||[51.5074,-0.1278];
+    document.getElementById('lat').value=p[0].toFixed(4);
+    document.getElementById('lng').value=p[1].toFixed(4);
+    if(mapInput){
+      mapInput.setView(p,13);
+      inputMarker.setLatLng(p);
+    }
+  }
+  document.getElementById('zone').addEventListener('change',setMapLocation);
+
+  document.getElementById('lat').addEventListener('change',()=>{
+    if(mapInput){
+      const lat=parseFloat(document.getElementById('lat').value),lng=parseFloat(document.getElementById('lng').value);
+      if(Number.isFinite(lat)&&Number.isFinite(lng)){mapInput.setView([lat,lng],13);inputMarker.setLatLng([lat,lng])}
+    }
+  });
+  document.getElementById('lng').addEventListener('change',()=>{
+    if(mapInput){
+      const lat=parseFloat(document.getElementById('lat').value),lng=parseFloat(document.getElementById('lng').value);
+      if(Number.isFinite(lat)&&Number.isFinite(lng)){mapInput.setView([lat,lng],13);inputMarker.setLatLng([lat,lng])}
+    }
+  });
+
+  document.getElementById('toProperty').addEventListener('click',()=>{
+    const lat=parseFloat(document.getElementById('lat').value),lng=parseFloat(document.getElementById('lng').value);
+    if(!Number.isFinite(lat)||!Number.isFinite(lng)){notify('Ingresa coordenadas válidas.');return}
+    show('property');
+  });
+
+  const guests=document.getElementById('guests');
+  document.querySelector('.inc').addEventListener('click',()=>guests.value=Math.min(16,Number(guests.value)+1));
+  document.querySelector('.dec').addEventListener('click',()=>guests.value=Math.max(1,Number(guests.value)-1));
+  const availability=document.getElementById('availability');
+  availability.addEventListener('input',()=>document.getElementById('availabilityOut').textContent=availability.value);
+
+  function setBars(cls){
+    const dist={
+      'ECONÓMICO':[82,11,5,2],
+      'MEDIO':[12,78,8,2],
+      'ALTO':[4,8,87,1],
+      'PREMIUM':[2,4,13,81]
+    }[cls];
+    const ids=[['bEco','pEco'],['bMid','pMid'],['bHigh','pHigh'],['bPrem','pPrem']];
+    ids.forEach((pair,i)=>{
+      document.getElementById(pair[0]).style.width=dist[i]+'%';
+      document.getElementById(pair[1]).textContent=dist[i]+'%';
+    });
+  }
+
+  document.getElementById('classifyBtn').addEventListener('click',()=>{
+    const v={
+      zone:document.getElementById('zone').value,
+      guests:Number(guests.value),
+      bedrooms:Number(document.getElementById('bedrooms').value),
+      baths:Number(document.getElementById('baths').value),
+      rating:Number(document.getElementById('rating').value),
+      avail:Number(availability.value)
+    };
+    if(v.bedrooms<0||v.baths<0||v.rating<0||v.rating>5){notify('Revisa los valores ingresados.');return}
+
+    let score=0;
+    score+=(v.zone==='Westminster'||v.zone==='Kensington and Chelsea')?2:0;
+    score+=v.guests>=5?2:v.guests>=3?1:0;
+    score+=v.bedrooms>=3?2:v.bedrooms>=2?1:0;
+    score+=v.baths>=2?1:0;
+    score+=v.rating>=4.8?1:0;
+
+    let cls='MEDIO',conf=83;
+    if(score<=1){cls='ECONÓMICO';conf=82}
+    else if(score<=3){cls='MEDIO';conf=83}
+    else if(score<=6){cls='ALTO';conf=87.4}
+    else{cls='PREMIUM';conf=89}
+
+    document.getElementById('className').textContent='▥ '+cls;
+    document.getElementById('confidence').textContent=conf+'%';
+    setBars(cls);
+
+    document.getElementById('rZone').textContent=v.zone;
+    document.getElementById('rGuests').textContent=v.guests;
+    document.getElementById('rBedrooms').textContent=v.bedrooms;
+    document.getElementById('rBaths').textContent=v.baths;
+    document.getElementById('rRating').textContent=v.rating.toFixed(2);
+    document.getElementById('rAvail').textContent=v.avail;
+    document.getElementById('eZone').textContent=v.zone;
+    document.getElementById('eGuests').textContent=v.guests;
+    show('result');
+  });
+
+  function initMarketMap(){
+    if(typeof L==='undefined'){notify('No se pudo cargar el mapa. Revisa tu conexión.');return}
+    if(!mapMarket){
+      mapMarket=L.map('mapMarket').setView([51.5074,-0.1278],11);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+        maxZoom:19, attribution:'&copy; OpenStreetMap'
+      }).addTo(mapMarket);
+
+      const points=[
+        [51.4975,-0.1357,'Westminster','Alto'],
+        [51.5416,-0.1433,'Camden','Medio'],
+        [51.4991,-0.1938,'Kensington and Chelsea','Premium'],
+        [51.5035,-0.0804,'Southwark','Medio'],
+        [51.5450,-0.0553,'Hackney','Económico'],
+        [51.5155,-0.0922,'City of London','Premium'],
+        [51.5362,-0.1033,'Islington','Alto'],
+        [51.4695,-0.0677,'Peckham','Económico'],
+        [51.4613,-0.1156,'Brixton','Medio'],
+        [51.5521,-0.1583,'Hampstead','Alto'],
+        [51.5203,-0.0293,'Mile End','Económico'],
+        [51.4934,-0.0098,'Canary Wharf','Premium']
+      ];
+      const colors={'Económico':'#24a66a','Medio':'#2f80ed','Alto':'#f6a21a','Premium':'#8d62e9'};
+      points.forEach(p=>{
+        L.circleMarker([p[0],p[1]],{
+          radius:9,color:'#fff',weight:2,fillColor:colors[p[3]],fillOpacity:.9
+        }).addTo(mapMarket).bindPopup('<b>'+p[2]+'</b><br>Categoría: '+p[3]);
+      });
+    }
+    mapMarket.invalidateSize();
+  }
+})();
+</script>
+</body>
+</html>
