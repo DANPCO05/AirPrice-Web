@@ -24,11 +24,32 @@ AirPrice Web permite ingresar las características de un alojamiento, como ubica
 
 ## Tecnologías
 
-- HTML5
-- CSS3
-- JavaScript
-- Leaflet
-- OpenStreetMap
+- React + TypeScript (Vite)
+- React Router
+- react-hook-form + zod
+- Leaflet / react-leaflet + OpenStreetMap
+- oxlint + Prettier
+
+## Cómo ejecutar
+
+Requiere Node.js 22.12 o superior.
+
+```bash
+npm install
+cp .env.example .env   # en PowerShell: Copy-Item .env.example .env
+npm run dev
+```
+
+La app queda en http://localhost:5173.
+
+| Script                 | Qué hace                         |
+| ---------------------- | -------------------------------- |
+| `npm run dev`          | Servidor de desarrollo           |
+| `npm run build`        | Compila para producción          |
+| `npm run lint`         | Revisa el código con oxlint      |
+| `npm run typecheck`    | Revisa los tipos de TypeScript   |
+| `npm run format`       | Da formato al código (Prettier)  |
+| `npm run format:check` | Comprueba el formato (lo usa CI) |
 
 ## Dataset
 
@@ -46,8 +67,15 @@ Después del proceso de limpieza:
 
 ```text
 AirPrice-Web/
-├── index.html
-└── README.md
+├── src/
+│   ├── api/          # cliente HTTP + mocks
+│   ├── types/        # tipos del contrato con la API
+│   ├── components/   # UI reutilizable
+│   ├── features/     # prediction/ y market/
+│   ├── pages/        # Home, Location, Property, Result, Market
+│   └── styles/       # variables de color y tipografía
+├── legacy/           # prototipo HTML original (referencia)
+└── .github/workflows # CI: lint, typecheck, formato y build
 ```
 
 ## Repositorio principal

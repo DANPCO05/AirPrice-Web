@@ -1,0 +1,16 @@
+:root {
+  --navy: #102b49;
+  --blue: #2176ff;
+  --cyan: #eaf5ff;
+  --text: #10213a;
+  --muted: #6e7d93;
+  --line: #dce5ef;
+  --panel: #ffffff;
+  --bg: #f5f8fc;
+  --green: #24a66a;
+  --orange: #f6a21a;
+  --purple: #8d62e9;
+  --pink: #ea5f8c;
+  --shadow: 0 18px 45px rgba(16, 43, 73, 0.1);
+  --radius: 22px;
+}
