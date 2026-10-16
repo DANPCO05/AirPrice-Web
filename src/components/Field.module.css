@@ -1,0 +1,53 @@
+/* Estilos compartidos por Input y Select */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.label {
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.control {
+  width: 100%;
+  border: 1px solid #cbd8e5;
+  border-radius: 10px;
+  background: white;
+  padding: 11px 12px;
+  color: var(--text);
+  font: inherit;
+  outline: none;
+}
+
+.control:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(33, 118, 255, 0.12);
+}
+
+.control:disabled {
+  background: var(--bg);
+  color: var(--muted);
+}
+
+.invalid {
+  border-color: var(--pink);
+}
+
+.invalid:focus {
+  border-color: var(--pink);
+  box-shadow: 0 0 0 3px rgba(234, 95, 140, 0.15);
+}
+
+.hint {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.error {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--pink);
+}
