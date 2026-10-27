@@ -1,6 +1,14 @@
-import { NavLink, Outlet } from 'react-router-dom'
+import { useEffect } from 'react'
+import { NavLink, Outlet, useLocation } from 'react-router-dom'
 
 export default function Layout() {
+  const { pathname } = useLocation()
+
+  // Cada página empieza arriba (sin esto se conserva el scroll de la página anterior).
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
+
   return (
     <>
       <nav style={{ display: 'flex', gap: 16, padding: 16, background: 'var(--navy)' }}>

@@ -93,3 +93,69 @@ export const LIMITES_LONDRES = {
   lngMin: -0.5,
   lngMax: 0.28,
 }
+
+export interface Servicio extends Opcion {
+  // Los comunes se muestran siempre; el resto, al pulsar "Ver más servicios".
+  comun?: boolean
+}
+
+// Vocabulario de amenidades que acepta la API (GET /api/v1/schema → allowed_values.amenities).
+export const SERVICIOS = [
+  { value: 'wifi', label: 'Wi-Fi', comun: true },
+  { value: 'kitchen', label: 'Cocina', comun: true },
+  { value: 'heating', label: 'Calefacción', comun: true },
+  { value: 'washer', label: 'Lavadora', comun: true },
+  { value: 'air_conditioning', label: 'Aire acondicionado', comun: true },
+  { value: 'tv', label: 'Televisión', comun: true },
+  { value: 'workspace', label: 'Espacio de trabajo', comun: true },
+  { value: 'free_parking', label: 'Parking gratuito', comun: true },
+  { value: 'elevator', label: 'Ascensor', comun: true },
+  { value: 'self_checkin', label: 'Llegada autónoma', comun: true },
+  { value: 'dryer', label: 'Secadora', comun: true },
+  { value: 'dishwasher', label: 'Lavavajillas', comun: true },
+  { value: 'balcony', label: 'Balcón' },
+  { value: 'bathtub', label: 'Bañera' },
+  { value: 'bed_linens', label: 'Ropa de cama' },
+  { value: 'breakfast', label: 'Desayuno' },
+  { value: 'coffee_maker', label: 'Cafetera' },
+  { value: 'concierge', label: 'Conserjería' },
+  { value: 'crib', label: 'Cuna' },
+  { value: 'doorman', label: 'Portero' },
+  { value: 'essentials', label: 'Artículos básicos' },
+  { value: 'events', label: 'Se permiten eventos' },
+  { value: 'extra_pillows', label: 'Almohadas extra' },
+  { value: 'fireplace', label: 'Chimenea' },
+  { value: 'garden', label: 'Jardín' },
+  { value: 'gym', label: 'Gimnasio' },
+  { value: 'hair_dryer', label: 'Secador de pelo' },
+  { value: 'hangers', label: 'Perchas' },
+  { value: 'hot_tub', label: 'Jacuzzi' },
+  { value: 'iron', label: 'Plancha' },
+  { value: 'long_term', label: 'Estancias largas' },
+  { value: 'microwave', label: 'Microondas' },
+  { value: 'oven', label: 'Horno' },
+  { value: 'parking', label: 'Parking (de pago)' },
+  { value: 'patio', label: 'Patio' },
+  { value: 'pets', label: 'Se admiten mascotas' },
+  { value: 'pool', label: 'Piscina' },
+  { value: 'private_entrance', label: 'Entrada privada' },
+  { value: 'private_pool', label: 'Piscina privada' },
+  { value: 'refrigerator', label: 'Nevera' },
+  { value: 'rooftop', label: 'Azotea' },
+  { value: 'sauna', label: 'Sauna' },
+  { value: 'shampoo', label: 'Champú' },
+  { value: 'shared_pool', label: 'Piscina compartida' },
+  { value: 'smart_lock', label: 'Cerradura inteligente' },
+  { value: 'smoking', label: 'Se permite fumar' },
+  { value: 'stove', label: 'Fogón' },
+  { value: 'view', label: 'Vistas' },
+  { value: 'waterfront', label: 'Junto al agua' },
+] as const satisfies readonly Servicio[]
+
+export type CodigoServicio = (typeof SERVICIOS)[number]['value']
+
+export const OPCIONES_SUPERHOST = [
+  { value: 'UNKNOWN', label: 'No lo sé' },
+  { value: 't', label: 'Sí' },
+  { value: 'f', label: 'No' },
+] as const satisfies readonly Opcion[]

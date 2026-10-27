@@ -6,13 +6,20 @@ import Input from '@/components/Input'
 import Select from '@/components/Select'
 import MapaUbicacion from '@/features/prediction/MapaUbicacion'
 import { BARRIOS, CENTRO_LONDRES, type NombreBarrio } from '@/features/prediction/opciones'
+import { usePrediccion } from '@/features/prediction/prediccionContext'
 import { barrioMasCercano, estaEnLondres, type Punto } from '@/features/prediction/ubicacion'
 import styles from './Location.module.css'
 
 export default function Location() {
   const navigate = useNavigate()
-  const [punto, setPunto] = useState<Punto | null>(null)
-  const [barrio, setBarrio] = useState<NombreBarrio | ''>('')
+  const { ubicacion, guardarUbicacion } = usePrediccion()
+  // Si el usuario vuelve atrás, se recupera lo que ya había elegido.
+  const [punto, setPunto] = useState<Punto | null>(
+    ubicacion ? { lat: ubicacion.latitude, lng: ubicacion.longitude } : null,
+  )
+  const [barrio, setBarrio] = useState<NombreBarrio | ''>(
+    (ubicacion?.neighbourhood_cleansed as NombreBarrio | undefined) ?? '',
+  )
   const [centro, setCentro] = useState<Punto>(CENTRO_LONDRES)
   const [error, setError] = useState<string>()
 
@@ -37,7 +44,7 @@ export default function Location() {
       setError('Marca en el mapa dónde está el alojamiento.')
       return
     }
-    // TODO: guardar { latitude, longitude, neighbourhood_cleansed } en el Context del formulario (paso 2).
+    guardarUbicacion({ latitude: punto.lat, longitude: punto.lng, neighbourhood_cleansed: barrio })
     navigate('/propiedad')
   }
 
