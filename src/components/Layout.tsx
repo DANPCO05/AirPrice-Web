@@ -1,4 +1,3 @@
-
 import { useEffect } from 'react'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import styles from './Layout.module.css'
@@ -43,9 +42,7 @@ export default function Layout() {
                 key={enlace.ruta}
                 to={enlace.ruta}
                 end={enlace.exacto}
-                className={({ isActive }) =>
-                  `${styles.enlace} ${isActive ? styles.activo : ''}`
-                }
+                className={({ isActive }) => `${styles.enlace} ${isActive ? styles.activo : ''}`}
               >
                 {enlace.texto}
               </NavLink>
