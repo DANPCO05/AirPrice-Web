@@ -1,0 +1,13 @@
+.mapa {
+  height: 420px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  cursor: crosshair;
+}
+
+@media (max-width: 720px) {
+  .mapa {
+    height: 320px;
+  }
+}

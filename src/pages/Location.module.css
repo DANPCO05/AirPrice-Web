@@ -1,0 +1,50 @@
+.pagina {
+  display: grid;
+  gap: 20px;
+}
+
+.subtitulo {
+  color: var(--muted);
+  margin-top: 6px;
+}
+
+.contenido {
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) 2fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.campos {
+  display: grid;
+  gap: 14px;
+}
+
+.coordenadas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.acciones {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.atras {
+  color: var(--muted);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.atras:hover {
+  color: var(--text);
+}
+
+@media (max-width: 720px) {
+  .contenido {
+    grid-template-columns: 1fr;
+  }
+}
