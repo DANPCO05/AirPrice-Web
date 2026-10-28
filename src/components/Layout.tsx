@@ -1,28 +1,60 @@
+
 import { useEffect } from 'react'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
+import styles from './Layout.module.css'
+
+const enlaces = [
+  { ruta: '/', texto: 'Inicio', exacto: true },
+  { ruta: '/ubicacion', texto: 'Clasificar' },
+  { ruta: '/mercado', texto: 'Análisis' },
+  { ruta: '/resultado', texto: 'Resultado' },
+]
 
 export default function Layout() {
   const { pathname } = useLocation()
 
-  // Cada página empieza arriba (sin esto se conserva el scroll de la página anterior).
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [pathname])
 
   return (
     <>
-      <nav style={{ display: 'flex', gap: 16, padding: 16, background: 'var(--navy)' }}>
-        <NavLink to="/" style={{ color: 'white' }}>
-          Inicio
-        </NavLink>
-        <NavLink to="/ubicacion" style={{ color: 'white' }}>
-          Predecir
-        </NavLink>
-        <NavLink to="/mercado" style={{ color: 'white' }}>
-          Mercado
-        </NavLink>
-      </nav>
-      <main style={{ padding: 24 }}>
+      <header className={styles.header}>
+        <div className={styles.contenedor}>
+          <NavLink to="/" className={styles.marca}>
+            <span className={styles.logo} aria-hidden="true">
+              ⌂
+            </span>
+            <span>AirPrice</span>
+          </NavLink>
+
+          <a
+            className={styles.github}
+            href="https://github.com/DANPCO05/AirPrice-Web"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            GitHub ↗
+          </a>
+
+          <nav className={styles.nav} aria-label="Navegación principal">
+            {enlaces.map((enlace) => (
+              <NavLink
+                key={enlace.ruta}
+                to={enlace.ruta}
+                end={enlace.exacto}
+                className={({ isActive }) =>
+                  `${styles.enlace} ${isActive ? styles.activo : ''}`
+                }
+              >
+                {enlace.texto}
+              </NavLink>
+            ))}
+          </nav>
+        </div>
+      </header>
+
+      <main className={styles.main}>
         <Outlet />
       </main>
     </>
