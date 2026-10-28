@@ -1,0 +1,124 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: #102b49;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.contenedor {
+  width: 100%;
+  min-height: 84px;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.marca {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: white;
+  text-decoration: none;
+  font-size: 28px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.logo {
+  display: grid;
+  place-items: center;
+  width: 45px;
+  height: 45px;
+  border-radius: 13px;
+  font-size: 29px;
+  background: linear-gradient(145deg, #55a9ff, #1a6eff);
+  box-shadow: 0 9px 18px rgba(28, 112, 255, 0.28);
+}
+
+.github {
+  color: white;
+  text-decoration: none;
+  font-size: 17px;
+  font-weight: 700;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 12px;
+  padding: 12px 18px;
+  white-space: nowrap;
+}
+
+.github:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.enlace {
+  padding: 12px 15px;
+  color: #cdd9e8;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 600;
+  border-radius: 12px;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+
+.enlace:hover,
+.activo {
+  color: white;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.main {
+  padding: 24px;
+}
+
+@media (max-width: 850px) {
+  .contenedor {
+    flex-wrap: wrap;
+    gap: 14px;
+    padding: 14px 18px;
+  }
+
+  .marca {
+    font-size: 23px;
+  }
+
+  .nav {
+    width: 100%;
+    order: 3;
+    gap: 4px;
+  }
+
+  .enlace {
+    font-size: 15px;
+    padding: 10px 12px;
+  }
+
+  .github {
+    margin-left: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .main {
+    padding: 16px;
+  }
+
+  .github {
+    font-size: 14px;
+    padding: 9px 12px;
+  }
+
+  .enlace {
+    font-size: 14px;
+  }
+}
