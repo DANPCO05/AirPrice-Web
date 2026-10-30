@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import type { RoomType } from '@/types/api'
 import {
+  OPCIONES_IDENTIDAD,
   OPCIONES_SUPERHOST,
   SERVICIOS,
   TIPOS_ALOJAMIENTO,
@@ -19,6 +20,8 @@ const entero = (min: number, max: number) =>
     .min(min, `Debe ser ${min} o más`)
     .max(max, `Debe ser ${max} o menos`)
 
+const enteroOpcional = (min: number, max: number) => entero(min, max).optional()
+
 export const esquemaPropiedad = z.object({
   property_type: z.enum(valores(TIPOS_PROPIEDAD), { error: 'Elige el tipo de propiedad' }),
   room_type: z.enum(valores(TIPOS_ALOJAMIENTO), { error: 'Elige el tipo de alojamiento' }),
@@ -34,13 +37,32 @@ export const esquemaPropiedad = z.object({
   availability_365: entero(0, 365),
   amenities: z.array(z.enum(valores(SERVICIOS))),
   // Opcionales: si el anuncio es nuevo se dejan vacíos y la API usa sus valores por defecto.
-  number_of_reviews: entero(0, 100000).optional(),
+  number_of_reviews: entero(0, 10000).optional(),
   review_scores_rating: z
     .number({ error: 'Escribe un número' })
     .min(0, 'Debe ser entre 0 y 5')
     .max(5, 'Debe ser entre 0 y 5')
     .optional(),
   host_is_superhost: z.enum(valores(OPCIONES_SUPERHOST)),
+  // Opciones avanzadas: mejoran la precisión del modelo si se conocen.
+  maximum_nights: enteroOpcional(1, 2000),
+  host_listings_count: enteroOpcional(0, 1000),
+  calculated_host_listings_count: enteroOpcional(0, 1000),
+  availability_30: enteroOpcional(0, 30),
+  availability_60: enteroOpcional(0, 60),
+  availability_90: enteroOpcional(0, 90),
+  number_of_reviews_ltm: enteroOpcional(0, 10000),
+  number_of_reviews_l30d: enteroOpcional(0, 10000),
+  number_of_reviews_ly: enteroOpcional(0, 10000),
+  reviews_per_month: z
+    .number({ error: 'Escribe un número' })
+    .min(0, 'Debe ser 0 o más')
+    .max(100, 'Debe ser 100 o menos')
+    .optional(),
+  bathrooms_text: z.string().max(120, 'Máximo 120 caracteres').optional(),
+  host_identity_verified: z.enum(valores(OPCIONES_IDENTIDAD), {
+    error: 'Elige una opción',
+  }),
 })
 
 export type FormularioPropiedad = z.infer<typeof esquemaPropiedad>
@@ -54,6 +76,7 @@ export const VALORES_INICIALES: Partial<FormularioPropiedad> = {
   availability_365: 180,
   amenities: [],
   host_is_superhost: 'UNKNOWN',
+  host_identity_verified: 'UNKNOWN',
 }
 
 // El tipo de propiedad casi siempre determina el tipo de alojamiento; se sugiere para ahorrar un paso.

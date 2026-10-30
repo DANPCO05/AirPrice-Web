@@ -159,3 +159,9 @@ export const OPCIONES_SUPERHOST = [
   { value: 't', label: 'Sí' },
   { value: 'f', label: 'No' },
 ] as const satisfies readonly Opcion[]
+
+export const OPCIONES_IDENTIDAD = [
+  { value: 'UNKNOWN', label: 'No lo sé' },
+  { value: 't', label: 'Sí' },
+  { value: 'f', label: 'No' },
+] as const satisfies readonly Opcion[]

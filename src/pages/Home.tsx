@@ -18,6 +18,33 @@ const cifras = [
   { valor: 'Londres', titulo: 'Ciudad de referencia' },
 ]
 
+const herramientas = [
+  {
+    ruta: '/lote',
+    icono: '▦',
+    titulo: 'Predicción por lote',
+    detalle: 'Sube un CSV, valida las filas y descarga las predicciones.',
+  },
+  {
+    ruta: '/modelo',
+    icono: '▤',
+    titulo: 'Evaluación del modelo',
+    detalle: 'Métricas, matriz de confusión, ROC e importancia de variables.',
+  },
+  {
+    ruta: '/datos',
+    icono: '⌁',
+    titulo: 'Datos y limpieza',
+    detalle: 'Carga datos crudos, revisa su estructura y limpia el dataset.',
+  },
+  {
+    ruta: '/mercado',
+    icono: '▥',
+    titulo: 'Mercado de Londres',
+    detalle: 'Explora precios, barrios y clases del mercado de Airbnb.',
+  },
+]
+
 const pasos = [
   {
     numero: '1',
@@ -27,7 +54,7 @@ const pasos = [
   {
     numero: '2',
     titulo: 'Analizar con ML',
-    detalle: 'El modelo procesa los atributos cuando la API esté integrada.',
+    detalle: 'El modelo analiza los atributos y estima el rango de precio.',
   },
   {
     numero: '3',
@@ -82,7 +109,7 @@ export default function Home() {
             </div>
             <div className={styles.price}>£142</div>
           </div>
-          <div className={styles.example}>Ejemplo ilustrativo · No es una predicción real</div>
+          <div className={styles.example}>Alojamiento de ejemplo en Londres</div>
         </aside>
       </section>
 
@@ -109,6 +136,28 @@ export default function Home() {
         ))}
       </section>
 
+      <section aria-labelledby="titulo-herramientas">
+        <div className={styles.sectionHead}>
+          <span>HERRAMIENTAS</span>
+          <h2 id="titulo-herramientas">Todo el flujo, en un solo lugar</h2>
+          <p>
+            Clasificación individual, procesamiento por lote, evaluación del modelo y limpieza de
+            datos.
+          </p>
+        </div>
+        <div className={styles.tools}>
+          {herramientas.map((herramienta) => (
+            <Link to={herramienta.ruta} className={styles.toolCard} key={herramienta.ruta}>
+              <span className={styles.toolIcon} aria-hidden="true">
+                {herramienta.icono}
+              </span>
+              <strong>{herramienta.titulo}</strong>
+              <small>{herramienta.detalle}</small>
+            </Link>
+          ))}
+        </div>
+      </section>
+
       <section className={styles.process} aria-labelledby="titulo-proceso">
         <div className={styles.sectionHead}>
           <span>PROCESO</span>
@@ -128,8 +177,8 @@ export default function Home() {
           ))}
         </div>
         <p className={styles.footnote}>
-          El formulario de clasificación está disponible; la presentación de resultados reales
-          depende de la integración del modelo y su API.
+          Clasifica un alojamiento, procesa varios desde un archivo o explora el mercado de Londres
+          desde un mismo lugar.
         </p>
       </section>
     </div>

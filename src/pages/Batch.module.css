@@ -1,0 +1,273 @@
+.pagina {
+  display: grid;
+  gap: 20px;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding-bottom: 40px;
+}
+
+.encabezado {
+  background: linear-gradient(135deg, #102b49 0%, #1c4b7d 100%);
+  color: white;
+  border-radius: 26px;
+  padding: 32px;
+  box-shadow: var(--shadow);
+}
+
+.eyebrow {
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #9fc8ff;
+}
+
+.encabezado h1 {
+  font-size: clamp(28px, 4vw, 40px);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin: 12px 0;
+}
+
+.encabezado p {
+  color: #d4e4f7;
+  line-height: 1.6;
+  max-width: 780px;
+}
+
+.encabezado code {
+  background: rgba(255, 255, 255, 0.14);
+  border-radius: 5px;
+  padding: 2px 6px;
+}
+
+.subida {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.archivo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--blue);
+  color: white;
+  font-weight: 800;
+  border-radius: 11px;
+  padding: 11px 16px;
+  cursor: pointer;
+}
+
+.archivo input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.archivo:focus-within {
+  outline: 3px solid var(--orange);
+  outline-offset: 3px;
+}
+
+.botonSecundario {
+  border: 1px solid var(--line);
+  background: white;
+  color: var(--text);
+  border-radius: 11px;
+  padding: 11px 16px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.botonSecundario:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+}
+
+.nota {
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.nota code {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 1px 5px;
+}
+
+.archivoNombre {
+  margin-top: 12px;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.error {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #fff0f4;
+  border: 1px solid #ffd0df;
+  color: #9d1849;
+  line-height: 1.5;
+}
+
+.aviso {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #fff5e8;
+  border: 1px solid #ffd9a3;
+  color: #7a4b00;
+  line-height: 1.5;
+}
+
+.resumen {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.resumen div {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.resumen strong {
+  display: block;
+  font-size: 26px;
+  color: var(--navy);
+}
+
+.resumen span {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.ok {
+  color: var(--green) !important;
+}
+
+.mal {
+  color: var(--pink) !important;
+}
+
+.tablaWrap {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  min-width: 760px;
+}
+
+.tabla th,
+.tabla td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+
+.tabla th {
+  background: #f2f7fd;
+  color: var(--navy);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+}
+
+.tabla tr:last-child td {
+  border-bottom: none;
+}
+
+.chipOk,
+.chipMal {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 3px 9px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.chipOk {
+  background: #e8f8ef;
+  color: #176f52;
+}
+
+.chipMal {
+  background: #fff0f4;
+  color: #9d1849;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.texto {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.acciones {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.progresoTexto {
+  font-weight: 800;
+  color: var(--blue);
+}
+
+.progreso {
+  height: 12px;
+  background: var(--cyan);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 12px;
+}
+
+.progreso div {
+  height: 100%;
+  background: var(--blue);
+  transition: width 0.35s ease;
+}
+
+.probs {
+  max-width: 360px;
+  color: var(--muted);
+}
+
+.enlace {
+  color: var(--blue);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+@media (max-width: 760px) {
+  .resumen {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .progreso div {
+    transition: none;
+  }
+}

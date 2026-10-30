@@ -13,6 +13,7 @@ import {
   type FormularioPropiedad,
 } from '@/features/prediction/esquemaPropiedad'
 import {
+  OPCIONES_IDENTIDAD,
   OPCIONES_SUPERHOST,
   SERVICIOS,
   TIPOS_ALOJAMIENTO,
@@ -21,7 +22,7 @@ import {
 import { usePrediccion } from '@/features/prediction/prediccionContext'
 import styles from './Property.module.css'
 
-// Campo numérico opcional: vacío = undefined (la API usará su valor por defecto).
+// Campo numérico opcional: vacío = undefined (se usará un valor de referencia).
 const numeroOpcional = (valor: string) => (valor === '' ? undefined : Number(valor))
 
 const SERVICIOS_COMUNES = SERVICIOS.filter((s) => 'comun' in s && s.comun)
@@ -217,6 +218,124 @@ export default function Property() {
             {...register('host_is_superhost')}
           />
         </div>
+      </Card>
+
+      <Card title="⚙️ Opciones avanzadas (opcional)">
+        <p className={styles.nota}>
+          Estos campos mejoran la precisión del modelo, pero no son obligatorios. Si no los conoces,
+          déjalos vacíos: se usarán valores de referencia.
+        </p>
+        <details className={styles.mas}>
+          <summary>Mostrar campos avanzados</summary>
+          <div className={styles.campos}>
+            <div className={styles.grid3}>
+              <Input
+                label="Noches máximas"
+                type="number"
+                min={1}
+                max={2000}
+                error={errors.maximum_nights?.message}
+                {...register('maximum_nights', { setValueAs: numeroOpcional })}
+              />
+              <Input
+                label="Anuncios del anfitrión"
+                type="number"
+                min={0}
+                max={1000}
+                error={errors.host_listings_count?.message}
+                {...register('host_listings_count', { setValueAs: numeroOpcional })}
+              />
+              <Input
+                label="Anuncios calculados"
+                type="number"
+                min={0}
+                max={1000}
+                error={errors.calculated_host_listings_count?.message}
+                {...register('calculated_host_listings_count', { setValueAs: numeroOpcional })}
+              />
+            </div>
+
+            <div className={styles.grid3}>
+              <Input
+                label="Disponibilidad 30 días"
+                type="number"
+                min={0}
+                max={30}
+                error={errors.availability_30?.message}
+                {...register('availability_30', { setValueAs: numeroOpcional })}
+              />
+              <Input
+                label="Disponibilidad 60 días"
+                type="number"
+                min={0}
+                max={60}
+                error={errors.availability_60?.message}
+                {...register('availability_60', { setValueAs: numeroOpcional })}
+              />
+              <Input
+                label="Disponibilidad 90 días"
+                type="number"
+                min={0}
+                max={90}
+                error={errors.availability_90?.message}
+                {...register('availability_90', { setValueAs: numeroOpcional })}
+              />
+            </div>
+
+            <div className={styles.grid3}>
+              <Input
+                label="Reseñas últimos 12 meses"
+                type="number"
+                min={0}
+                max={10000}
+                error={errors.number_of_reviews_ltm?.message}
+                {...register('number_of_reviews_ltm', { setValueAs: numeroOpcional })}
+              />
+              <Input
+                label="Reseñas últimos 30 días"
+                type="number"
+                min={0}
+                max={10000}
+                error={errors.number_of_reviews_l30d?.message}
+                {...register('number_of_reviews_l30d', { setValueAs: numeroOpcional })}
+              />
+              <Input
+                label="Reseñas último año"
+                type="number"
+                min={0}
+                max={10000}
+                error={errors.number_of_reviews_ly?.message}
+                {...register('number_of_reviews_ly', { setValueAs: numeroOpcional })}
+              />
+            </div>
+
+            <div className={styles.grid3}>
+              <Input
+                label="Reseñas por mes"
+                type="number"
+                min={0}
+                max={100}
+                step={0.01}
+                error={errors.reviews_per_month?.message}
+                {...register('reviews_per_month', { setValueAs: numeroOpcional })}
+              />
+              <Input
+                label="Texto de baños"
+                placeholder="Ej. 1 private bath"
+                error={errors.bathrooms_text?.message}
+                {...register('bathrooms_text', {
+                  setValueAs: (valor: string | undefined) => valor?.trim() || undefined,
+                })}
+              />
+              <Select
+                label="Identidad verificada"
+                options={OPCIONES_IDENTIDAD}
+                error={errors.host_identity_verified?.message}
+                {...register('host_identity_verified')}
+              />
+            </div>
+          </div>
+        </details>
       </Card>
 
       <div className={styles.acciones}>

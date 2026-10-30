@@ -226,6 +226,45 @@
 .steps {
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
+.tools {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+.toolCard {
+  display: grid;
+  gap: 8px;
+  padding: 20px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  color: var(--text);
+  text-decoration: none;
+  transition: transform 0.2s;
+}
+.toolCard:hover {
+  transform: translateY(-2px);
+}
+.toolIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: #eaf3ff;
+  color: var(--blue);
+  font-size: 20px;
+  font-weight: 900;
+  margin-bottom: 4px;
+}
+.toolCard strong {
+  font-size: 16px;
+}
+.toolCard small {
+  color: var(--muted);
+  line-height: 1.55;
+}
 .step {
   padding: 20px;
 }
@@ -277,7 +316,8 @@
   }
   .featureStrip,
   .stats,
-  .steps {
+  .steps,
+  .tools {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
@@ -297,7 +337,8 @@
   }
   .featureStrip,
   .stats,
-  .steps {
+  .steps,
+  .tools {
     grid-template-columns: 1fr;
   }
   .actions a {
