@@ -17,7 +17,9 @@ export default function Market() {
   useEffect(() => {
     const controlador = new AbortController()
     obtenerEstadisticas(controlador.signal)
-      .then(setDatos)
+      .then((resultado) => {
+        setDatos(resultado.datos)
+      })
       .catch((e: unknown) => {
         if (!controlador.signal.aborted)
           setError(e instanceof Error ? e.message : 'Error al cargar las estadísticas.')
@@ -85,8 +87,7 @@ export default function Market() {
         <>
           {datosFiltrados.total_listings === 0 && (
             <p className={styles.notice}>
-              Dashboard preparado. Todavía no hay estadísticas cargadas: configura VITE_API_URL o
-              genera el JSON con los datos limpios de AirPrice.
+              No hay estadísticas disponibles para los filtros seleccionados.
             </p>
           )}
           <MarketStats data={datosFiltrados} />

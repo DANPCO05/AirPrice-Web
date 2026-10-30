@@ -13,14 +13,17 @@ AirPrice Web permite ingresar las características de un alojamiento, como ubica
 
 ## Funcionalidades actuales
 
-- Página de inicio.
-- Formulario de características del alojamiento.
-- Mapa interactivo de Londres.
-- Selección de ubicación y coordenadas.
-- Visualización del resultado de clasificación.
-- Nivel de confianza de la predicción.
-- Variables que influyen en el resultado.
-- Dashboard de análisis del dataset.
+- Página de inicio con acceso a todas las herramientas.
+- Formulario de ubicación con mapa interactivo de Londres.
+- Formulario de características del alojamiento, con opciones avanzadas.
+- **Predicción individual**: etiqueta, confianza, probabilidades y advertencias.
+- Descarga del resultado individual en CSV y JSON.
+- **Predicción por lote** desde un CSV: validación, vista previa, procesamiento por partes de 50, progreso y descarga de resultados.
+- Plantilla CSV descargable.
+- **Evaluación del modelo**: métricas, matriz de confusión, curvas ROC, importancia de variables y comparación de modelos.
+- **Datos y limpieza**: carga de CSV, vista de datos crudos, limpieza y descarga del dataset limpio.
+- Dashboard de mercado.
+- Manejo de errores `422`, `429`, `503` y de red.
 
 ## Tecnologías
 
@@ -32,7 +35,20 @@ AirPrice Web permite ingresar las características de un alojamiento, como ubica
 
 ## Cómo ejecutar
 
-Requiere Node.js 22.12 o superior.
+Requiere Node.js 22.12 o superior y la API de AirPrice en marcha.
+
+### 1. API
+
+Desde el repositorio `AirPrice`:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+uvicorn app.main:app --reload --port 8000
+```
+
+La API tarda unos segundos en cargar el modelo. Verifica `http://localhost:8000/health`.
+
+### 2. Frontend
 
 ```bash
 npm install
@@ -41,6 +57,8 @@ npm run dev
 ```
 
 La app queda en http://localhost:5173.
+
+Si Vite usa otro puerto, añade ese origen a `AIRPRICE_ALLOWED_ORIGINS` en el `.env` raíz de `AirPrice` y reinicia la API.
 
 | Script                 | Qué hace                         |
 | ---------------------- | -------------------------------- |
@@ -68,11 +86,12 @@ Después del proceso de limpieza:
 ```text
 AirPrice-Web/
 ├── src/
-│   ├── api/          # cliente HTTP + mocks
+│   ├── api/          # cliente HTTP y llamadas a la API
+│   ├── lib/          # utilidades CSV y descargas
 │   ├── types/        # tipos del contrato con la API
 │   ├── components/   # UI reutilizable
-│   ├── features/     # prediction/ y market/
-│   ├── pages/        # Home, Location, Property, Result, Market
+│   ├── features/     # prediction/, market/, model/ y data/
+│   ├── pages/        # Home, Location, Property, Result, Market, Batch, Model, Data
 │   └── styles/       # variables de color y tipografía
 ├── legacy/           # prototipo HTML original (referencia)
 └── .github/workflows # CI: lint, typecheck, formato y build
@@ -84,8 +103,6 @@ El procesamiento de datos, análisis y modelos de Machine Learning se encuentran
 
 https://github.com/DANPCO05/AirPrice
 
-## Estado del proyecto
+## Alcance
 
-Actualmente el proyecto se encuentra en fase de **diseño y desarrollo del prototipo web**.
-
-Las predicciones mostradas en la interfaz son demostrativas. Posteriormente se realizará la integración con el modelo de Machine Learning entrenado en AirPrice.
+La aplicación incluye clasificación individual y por lote, evaluación del modelo, limpieza de datos y análisis de mercado en una sola interfaz.

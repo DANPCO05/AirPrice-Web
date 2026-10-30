@@ -1,0 +1,400 @@
+.pagina {
+  display: grid;
+  gap: 20px;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding-bottom: 40px;
+}
+
+.encabezado {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 28px;
+  background: linear-gradient(135deg, #102b49 0%, #173f69 100%);
+  color: white;
+  border-radius: 26px;
+  padding: 32px;
+  box-shadow: var(--shadow);
+}
+
+.eyebrow {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #9fc8ff;
+}
+
+.encabezado h1 {
+  font-size: clamp(28px, 4vw, 42px);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  margin: 12px 0;
+}
+
+.encabezado p {
+  color: #d4e4f7;
+  line-height: 1.6;
+  max-width: 650px;
+}
+
+.clase {
+  white-space: nowrap;
+}
+
+.economico {
+  color: #7ee2b8;
+}
+
+.medio {
+  color: #8ec5ff;
+}
+
+.alto {
+  color: #ffd479;
+}
+
+.premium {
+  color: #d6b8ff;
+}
+
+.confianzaCard {
+  flex: 0 0 230px;
+  display: grid;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 18px;
+  padding: 18px;
+  backdrop-filter: blur(8px);
+}
+
+.confianzaCard span {
+  font-size: 13px;
+  color: #d4e4f7;
+}
+
+.confianzaCard strong {
+  font-size: 38px;
+  line-height: 1;
+}
+
+.confianzaCard small {
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.fiable {
+  color: #8ef0c2;
+}
+
+.pocoFiable {
+  color: #ffb6c9;
+}
+
+.track {
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--blue);
+  transition: width 0.45s ease;
+}
+
+.aviso {
+  padding: 14px 18px;
+  border-radius: 14px;
+  background: #fff5e8;
+  border: 1px solid #ffd9a3;
+  color: #7a4b00;
+  line-height: 1.55;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: 20px;
+}
+
+.probabilidades {
+  display: grid;
+  gap: 16px;
+}
+
+.probRow {
+  display: grid;
+  gap: 7px;
+}
+
+.probRow .track {
+  background: var(--cyan);
+  height: 13px;
+}
+
+.probLabel {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 14px;
+}
+
+.probLabel strong {
+  white-space: nowrap;
+}
+
+.probActiva {
+  font-weight: 800;
+  color: var(--navy);
+}
+
+.barraECONOMICO {
+  background: var(--green);
+}
+
+.barraMEDIO {
+  background: var(--blue);
+}
+
+.barraALTO {
+  background: var(--orange);
+}
+
+.barraPREMIUM {
+  background: var(--purple);
+}
+
+.rango {
+  font-size: clamp(26px, 3vw, 36px);
+  font-weight: 900;
+  color: var(--navy);
+  margin-bottom: 10px;
+}
+
+.texto {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.detalles,
+.resumen {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.detalles {
+  grid-template-columns: 1fr;
+}
+
+.detalles div,
+.resumen div {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+}
+
+.detalles dt,
+.resumen dt {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.detalles dd,
+.resumen dd {
+  font-weight: 700;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12px;
+}
+
+.metricas {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.metricas div {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.metricas strong {
+  display: block;
+  font-size: 27px;
+  color: var(--navy);
+}
+
+.metricas span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.nota {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #eef6ff;
+  border: 1px solid #d7e8fb;
+  color: #4a6282;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.resumen {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 28px;
+}
+
+.resumen div {
+  border-top: 1px solid var(--line);
+}
+
+.accionesSecundarias {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+  font-size: 14px;
+}
+
+.mas {
+  margin-top: 14px;
+}
+
+.mas summary {
+  cursor: pointer;
+  color: var(--blue);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.lista {
+  margin: 12px 0 0 18px;
+  color: var(--muted);
+  line-height: 1.6;
+  font-size: 13px;
+}
+
+.acciones {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.botones {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.enlacePrincipal,
+.enlaceSecundario {
+  display: inline-flex;
+  align-items: center;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.enlacePrincipal {
+  color: white;
+  background: var(--blue);
+  border-radius: 11px;
+  padding: 11px 16px;
+}
+
+.enlaceSecundario {
+  color: var(--muted);
+}
+
+.enlaceSecundario:hover {
+  color: var(--text);
+}
+
+.botonSecundario {
+  border: 1px solid var(--line);
+  background: white;
+  color: var(--text);
+  border-radius: 12px;
+  padding: 10px 18px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.botonSecundario:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+}
+
+.error {
+  color: #9d1849;
+  background: #fff0f4;
+  border: 1px solid #ffd0df;
+  border-radius: 12px;
+  padding: 13px 15px;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.esqueleto {
+  height: 140px;
+  border-radius: 16px;
+  background: linear-gradient(90deg, #eef4fb 25%, #f8fbff 50%, #eef4fb 75%);
+  background-size: 200% 100%;
+  animation: brillo 1.4s infinite linear;
+}
+
+@keyframes brillo {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@media (max-width: 850px) {
+  .encabezado {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .confianzaCard {
+    width: 100%;
+    flex-basis: auto;
+  }
+
+  .grid,
+  .resumen,
+  .metricas {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fill {
+    transition: none;
+  }
+
+  .esqueleto {
+    animation: none;
+  }
+}

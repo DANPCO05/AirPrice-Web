@@ -5,8 +5,10 @@ import styles from './Layout.module.css'
 const enlaces = [
   { ruta: '/', texto: 'Inicio', exacto: true },
   { ruta: '/ubicacion', texto: 'Clasificar' },
-  { ruta: '/mercado', texto: 'Análisis' },
-  { ruta: '/resultado', texto: 'Resultado' },
+  { ruta: '/lote', texto: 'Lote' },
+  { ruta: '/mercado', texto: 'Mercado' },
+  { ruta: '/modelo', texto: 'Modelo' },
+  { ruta: '/datos', texto: 'Datos' },
 ]
 
 export default function Layout() {
